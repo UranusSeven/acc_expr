@@ -102,14 +102,21 @@ def main(array_a: list[int], array_b: list[int]):
 
 
 if __name__ == "__main__":
-    array_a_0 = [0X77, 0X77, 0X67, 0X47, 0X26, 0XF]
-    array_b_0 = [0X60, 0X48, 0X38, 0X38, 0X38, 0X38]
+    array_a_0 = [0x77, 0x77, 0x67, 0x47, 0x26, 0xF]
+    array_b_0 = [0x60, 0x48, 0x38, 0x38, 0x38, 0x38]
     main(array_a_0, array_b_0)
     debug(array_a_0, array_b_0)
 
     print("\n----------------------------------------------------------------\n")
 
-    array_a_1 = [0X77, 0X77, 0X67, 0X47, 0X26, 0XF, 0X4]
-    array_b_1 = [0X60, 0X48, 0X38, 0X38, 0X38, 0X38, 0X38]
+    array_a_1 = [0x77, 0x77, 0x67, 0x47, 0x26, 0xF, 0x4]
+    array_b_1 = [0x60, 0x48, 0x38, 0x38, 0x38, 0x38, 0x38]
     main(array_a_1, array_b_1)
     debug(array_a_1, array_b_1)
+
+    print("\n----------------------------------------------------------------\n")
+
+    array_a_2 = [0x77, 0x57]
+    array_b_2 = [0x38,0x38]
+    main(array_a_2, array_b_2)
+    debug(array_a_2, array_b_2)
