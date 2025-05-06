@@ -30,7 +30,7 @@ def init_tensors(array_a: list[int], array_b: list[int], m, n, k, transposed=Fal
     return a_fp8e4m3, b_fp8e4m3
 
 
-def test_deep_gemm(array_a: list[int], array_b: list[int], m, k, n):
+def test_deep_gemm(array_a: list[int], array_b: list[int], m, k, n, print_ref=False):
     import deep_gemm    
 
     a, b = init_tensors(array_a, array_b, m, n, k, transposed=False)
@@ -40,14 +40,33 @@ def test_deep_gemm(array_a: list[int], array_b: list[int], m, k, n):
     out = torch.zeros(m, n, dtype=torch.bfloat16, device='cuda')
     deep_gemm.gemm_fp8_fp8_bf16_nt((a, a_scale), (b, b_scale), out)
     
-    print(f"Out: {out.shape} {out.dtype}")
+    print(f"deep_gemm.gemm_fp8_fp8_bf16_nt: {out.shape} {out.dtype}")
     print(out)
 
-    a_ref = a.to(torch.float32)
-    b_ref = b.to(torch.float32)
-    out_ref = torch.mm(a_ref, b_ref.T)
-    print(f"Ref: {out_ref.shape} {out_ref.dtype}")
-    print(out_ref)
+    if print_ref:
+        a_ref = a.to(torch.float32)
+        b_ref = b.to(torch.float32)
+        out_ref = torch.mm(a_ref, b_ref.T)
+        print(f"Ref: {out_ref.shape} {out_ref.dtype}")
+        print(out_ref)
+
+
+def test_scaled_mm(array_a: list[int], array_b: list[int], m, k, n, print_ref=False):
+
+    a, b = init_tensors(array_a, array_b, m, n, k, transposed=True)
+    a_scale = torch.ones(m, (k + 127) // 128).cuda()
+    b_scale = torch.ones((n + 127) // 128, (k + 127) // 128).cuda()
+    out = torch._scaled_mm(a, b, out_dtype=torch.float32,scale_a=a_scale,scale_b=b_scale)
+
+    print(f"torch._scaled_mm: {out.shape} {out.dtype}")
+    print(out)
+    
+    if print_ref:
+        a_ref = a.to(torch.float32)
+        b_ref = b.to(torch.float32)
+        out_ref = torch.mm(a_ref, b_ref)
+        print(f"Ref: {out_ref.shape} {out_ref.dtype}")
+        print(out_ref)
 
 
 def binary_to_fp8e4m3(bits: str):
@@ -99,6 +118,7 @@ def debug(array_a: list[int], array_b: list[int]):
 def main(array_a: list[int], array_b: list[int]):
     m, k, n = 1, 128, 64
     test_deep_gemm(array_a, array_b, m, k, n)
+    test_scaled_mm(array_a, array_b, m, k, n, print_ref=True)
 
 
 if __name__ == "__main__":
