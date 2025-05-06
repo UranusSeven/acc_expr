@@ -15,7 +15,9 @@ CUDA_HOME=/path/to/cuda-12.4/ python acc_expr.py
 ```
 A: [0x77, 0x77, 0x67, 0x47, 0x26, 0xF]
 B: [0x60, 0x48, 0x38, 0x38, 0x38, 0x38]
-Out (fp8_fp8_bf16): 8704.
+deep_gemm.gemm_fp8_fp8_bf16_nt: (fp8_fp8_bf16): 8704.
+torch._scaled_mm (fp8_fp8_bf16): 8704.
+torch._scaled_mm (fp8_fp8_fp32): 8703.
 Ref(fp32_fp32_fp32): 8703.9980
 Decimal Ref: 8703.998046875
 ```
@@ -23,7 +25,9 @@ Decimal Ref: 8703.998046875
 ```
 A: [0x77, 0x77, 0x67, 0x47, 0x26, 0xF, 0x4]
 B: [0x60, 0x48, 0x38, 0x38, 0x38, 0x38, 0x38]
-Out(fp8_fp8_bf16): 8704.
+deep_gemm.gemm_fp8_fp8_bf16_nt (fp8_fp8_bf16): 8704.
+torch._scaled_mm (fp8_fp8_bf16): 8704.
+torch._scaled_mm (fp8_fp8_fp32): 8703.
 Ref(fp32_fp32_fp32): 8704.0059
 Decimal Ref: 8704.005859375
 ```
@@ -31,7 +35,9 @@ Decimal Ref: 8704.005859375
 ```
 A:[0x77,0x57]
 B:[0x38,0x38]
-Out(fp8_fp8_bf16): 255.
+deep_gemm.gemm_fp8_fp8_bf16_nt (fp8_fp8_bf16): 255.
+torch._scaled_mm (fp8_fp8_bf16): 255.
+torch._scaled_mm (fp8_fp8_fp32): 255.
 Ref(fp32_fp32_fp32): 255.
 Decimal Ref: 255.0
 ```
