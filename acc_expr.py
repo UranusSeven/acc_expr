@@ -52,12 +52,15 @@ def test_deep_gemm(array_a: list[int], array_b: list[int], m, k, n, print_ref=Fa
 
 
 def test_scaled_mm(array_a: list[int], array_b: list[int], m, k, n, print_ref=False):
-
     a, b = init_tensors(array_a, array_b, m, n, k, transposed=True)
-    a_scale = torch.ones(m, (k + 127) // 128).cuda()
-    b_scale = torch.ones((n + 127) // 128, (k + 127) // 128).cuda()
-    out = torch._scaled_mm(a, b, out_dtype=torch.float32,scale_a=a_scale,scale_b=b_scale)
+    a_scale = torch.ones(1).cuda()
+    b_scale = torch.ones(1).cuda()
 
+    out = torch._scaled_mm(a, b, out_dtype=torch.bfloat16, scale_a=a_scale, scale_b=b_scale)
+    print(f"torch._scaled_mm: {out.shape} {out.dtype}")
+    print(out)
+
+    out = torch._scaled_mm(a, b, out_dtype=torch.float32, scale_a=a_scale, scale_b=b_scale)
     print(f"torch._scaled_mm: {out.shape} {out.dtype}")
     print(out)
     
